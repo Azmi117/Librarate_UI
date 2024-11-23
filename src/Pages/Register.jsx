@@ -2,7 +2,7 @@ const Register = () => {
   return (
     <>
       <div className="xl:flex flex-row">
-        <div className="w-960 xl:w-3/4 min-h-screen bg-[url('./scales.jpg')] bg-[center_bottom] bg-cover overflow-x-hidden">
+        <div className="w-960 xl:w-3/4 min-h-screen bg-[url('/scales.jpg')] bg-[center_bottom] bg-cover overflow-x-hidden">
           {/* Mobile & Tab */}
           <div className="xl:hidden flex flex-col mt-14 overflow-y-auto">
             <div className="flex justify-center">
