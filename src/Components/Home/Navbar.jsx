@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SmallBox from './smallBox';
+import useAuthStore from '../../store/store';
 
 const Navbar = ({ children }) => {
+  const { isLoggedIn, token, logout } = useAuthStore();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isSmallBox, setIsSmallBox] = useState(false);
 
@@ -81,22 +84,48 @@ const Navbar = ({ children }) => {
                 </button>
                   {isSmallBox && <SmallBox />}
               </li>
-              <li className="md:hidden">
-                <Link
-                  href="#"
-                  className="block py-2 px-3 text-white rounded hover:bg-gray-700"
-                >
-                  Login
-                </Link>
-              </li>
-              <li className="md:hidden">
-                <Link
-                  href="#"
-                  className="block py-2 px-3 text-white rounded hover:bg-gray-700"
-                >
-                  Register
-                </Link>
-              </li>
+              {isLoggedIn ? (
+                <>
+                  <div className='flex justify-center'>
+                    <img src="https://plus.unsplash.com/premium_photo-1661414561433-cfeffc4430da?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" className='rounded-full w-20 h-20 md:hidden'/>
+                  </div>
+                  <li className="md:hidden">
+                  <Link
+                    to={'/profile'}
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-700"
+                  >
+                    Edit Profile
+                  </Link>
+                </li>
+                <li className="md:hidden">
+                  <Link
+                    to={'#'}
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-700"
+                  >
+                    Logout
+                  </Link>
+                </li>
+                </>
+              ) : (
+                <>
+                  <li className="md:hidden">
+                    <Link
+                      to={'/login'}
+                      className="block py-2 px-3 text-white rounded hover:bg-gray-700"
+                    >
+                      Login
+                    </Link>
+                  </li>
+                  <li className="md:hidden">
+                    <Link
+                      to={'/register'}
+                      className="block py-2 px-3 text-white rounded hover:bg-gray-700"
+                    >
+                      Register
+                    </Link>
+                  </li>
+                </>
+              )}
               <li>
                 <Link
                   href="#"
@@ -114,9 +143,9 @@ const Navbar = ({ children }) => {
                 </Link>
               </li>
               <li className="px-2 md:hidden">
-                <div className="flex">
+                <div className="flex mt-2">
                   <img src="https://www.svgrepo.com/show/532551/search-alt-1.svg" alt="" className="w-7 h-7 bg-white border border-slate-950 rounded-l-md p-1" />
-                  <input type="text" className="w-full rounded-r-md h-7 px-1 border border-slate-950" />
+                  <input type="text" className="w-full rounded-r-md h-7 px-1 border border-slate-950" placeholder='Enter title here..' />
                 </div>
               </li>
             </ul>
