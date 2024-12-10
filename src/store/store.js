@@ -1,10 +1,16 @@
 import { create } from "zustand";
 
 const useAuthStore = create((set) => ({
-  token: null, // Untuk menyimpan token
-  isLoggedIn: false, // Status login
-  setLogin: (token) => set({ token, isLoggedIn: true }), // Fungsi untuk login
-  logout: () => set({ token: null, isLoggedIn: false }), // Fungsi untuk logout
+  token: localStorage.getItem("token") || null, // Ambil token dari localStorage saat inisialisasi
+  isLoggedIn: !!localStorage.getItem("token"), // Status login berdasarkan token di localStorage
+  setLogin: ({ token }) => {
+    localStorage.setItem("token", token); // Simpan token ke localStorage
+    set({ token, isLoggedIn: true });
+  },
+  logout: () => {
+    localStorage.removeItem("token"); // Hapus token dari localStorage
+    set({ token: null, isLoggedIn: false });
+  },
 }));
 
 export default useAuthStore;

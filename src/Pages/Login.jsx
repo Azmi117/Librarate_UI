@@ -1,22 +1,25 @@
 import { useState } from "react";
-import useAuthStore from "../store/store";
+import useStore from "../store/store";
 import { login } from "../Services/authServices";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { setLogin } = useAuthStore();
+    const { setLogin } = useStore();
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
           const params = { email, password };
-          console.log(params);
           const data = await login(params);
-          setLogin(data.token);
-          navigate("/");
+          if (data && data.token) {
+            setLogin({ token: data.token, user: data.user });
+            navigate("/");
+          } else {
+            throw new Error("Invalid login response");
+          }
         } catch (error) {
             console.error(error);
         }

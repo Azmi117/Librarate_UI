@@ -126,3 +126,29 @@
     font-weight: 400;
     font-style: normal;
   }
+  
+  /* Container with perspective */
+.perspective-container {
+  perspective: 500px; /* Adjust for depth */
+}
+
+/* 3D card effect */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease-in-out;
+}
+
+.image-3d {
+  opacity: 0; /* Awalnya tidak terlihat */
+  transform: translateZ(30px) scale(0.9); /* Awalnya sedikit lebih kecil */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Transisi kemunculan */
+}
+
+.group:hover .card-3d {
+  transform: rotateX(20deg) rotateY(0deg);
+}
+
+/* Reset hover effect */
+.group:hover .card-3d img {
+  transition: opacity 0.3s ease-in-out;
+}

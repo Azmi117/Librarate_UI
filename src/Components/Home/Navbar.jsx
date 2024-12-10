@@ -1,13 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SmallBox from './smallBox';
 import useAuthStore from '../../store/store';
+import { jwtDecode } from 'jwt-decode';
+import { getUserByID } from '../../Services/userService';
 
-const Navbar = ({ children }) => {
-  const { isLoggedIn, token, logout } = useAuthStore();
-
+const Navbar = ({ children, onSearch, onSelectCountry }) => {
+  const { isLoggedIn } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isSmallBox, setIsSmallBox] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [userId, setUserId] = useState(null);
+  const [userPhoto, setUserPhoto] = useState(null);
+
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const savedToken = localStorage.getItem('token');
+      if(savedToken){
+        try{
+          const decodeToken = jwtDecode(savedToken);
+          setUserId(decodeToken.id);
+          console.log('>>>>>>>>>>>>>',decodeToken.id);
+          const userData = await getUserByID(decodeToken.id, savedToken);
+          setUserPhoto(userData.photo);
+        }catch(error){
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+    if(isLoggedIn){
+      fetchUser();
+    }
+  }, [isLoggedIn]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -17,27 +43,70 @@ const Navbar = ({ children }) => {
     setIsSmallBox(!isSmallBox);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleCountryChange = (e) => {
+    setSelectedCountry(e.target.value);
+    if (onSearch) {
+      onSearch(''); // Reset search query saat country berubah
+      onSelectCountry(e.target.value); // Kirimkan country ke Home.jsx
+    }
+  };  
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      if (onSearch) {
+        onSearch(searchQuery); // Panggil fungsi yang diteruskan dari Home.jsx
+      } // Panggil fungsi onSearch saat tombol Enter ditekan
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (onSearch) {
+      onSearch(searchQuery); // Kirimkan nilai saat tombol diklik
+    }
+  };
+
   return (
     <>
       <nav className="w-screen bg-[#7C93C3] border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link to={'https://www.google.com/'}>
+          <Link to={'#'}>
             <img
               src="./logo.png"
               width="90px"
-              alt="Flowbite Logo"
+              alt="Librarate Logo"
             />
           </Link>
 
           <div className="hidden md:flex flex items-center">
-            <input type="text" className="lg:w-[20rem] md:w-[12rem] h-9 rounded-l-lg border border-slate-600 bg-[#D9D9D9] ps-1" placeholder="Enter title book here" />
-            <select name="" id="" className="h-9 border border-slate-600 bg-[#D9D9D9]">
+            <input 
+              type="search" 
+              className="lg:w-[20rem] md:w-[12rem] h-9 rounded-l-lg border border-slate-600 bg-[#D9D9D9] ps-1" 
+              placeholder="Enter title book here" 
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+              />
+            <select 
+                name="" 
+                id="" 
+                className="h-9 border border-slate-600 bg-[#D9D9D9]"
+                value={selectedCountry}
+                onChange={handleCountryChange}
+              >
               <option value="" disabled selected>Country</option>
-              <option value="option1">Indonesia</option>
-              <option value="option2">Korea</option>
-              <option value="option3">Japan</option>
+              <option value="">None</option>
+              <option value="Indonesia">Indonesia</option>
+              <option value="Korea">Korea</option>
+              <option value="Japan">Japan</option>
             </select>
-            <button className="h-9 border border-slate-600 p-2 rounded-r-lg bg-[#EAD8C0] hover:bg-gray-500">
+            <button 
+              className="h-9 border border-slate-600 p-2 rounded-r-lg bg-[#EAD8C0] hover:bg-gray-500"
+              onClick={handleSearchClick}
+            >
               <img src="https://www.svgrepo.com/show/521826/search.svg" alt="" width="20px" />
             </button>
           </div>
@@ -80,14 +149,24 @@ const Navbar = ({ children }) => {
                   className="hidden md:block py-2 px-3 text-white rounded"
                   aria-current="page"
                 >
-                  <img src="https://www.svgrepo.com/show/487693/profile-2.svg" alt="" width="25px" />
+                  {isLoggedIn ? (
+                    <>
+                    <div className='-me-[38px]'>
+                      <img src={userPhoto || "https://plus.unsplash.com/premium_photo-1661414561433-cfeffc4430da?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="" className='w-10 h-10 rounded-full'/>
+                    </div>
+                    </>
+                  ):(
+                    <>
+                      <img src="https://www.svgrepo.com/show/513868/user.svg" alt="" className='w-7'/>
+                    </>
+                  )}
                 </button>
                   {isSmallBox && <SmallBox />}
               </li>
               {isLoggedIn ? (
                 <>
                   <div className='flex justify-center'>
-                    <img src="https://plus.unsplash.com/premium_photo-1661414561433-cfeffc4430da?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" className='rounded-full w-20 h-20 md:hidden'/>
+                    <img src={userPhoto || "https://plus.unsplash.com/premium_photo-1661414561433-cfeffc4430da?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="" className='rounded-full w-20 h-20 md:hidden'/>
                   </div>
                   <li className="md:hidden">
                   <Link
@@ -126,21 +205,36 @@ const Navbar = ({ children }) => {
                   </li>
                 </>
               )}
-              <li>
+              <li className='flex items-center'>
                 <Link
                   href="#"
-                  className="block py-2 px-3 text-white rounded hover:bg-gray-700 lg:hover:bg-inherit lg:hover:text-slate-950"
+                  className="block py-2 px-3 text-white rounded hover:bg-gray-700 lg:hover:bg-inherit lg:hover:text-slate-950 flex"
                 >
                   About
                 </Link>
               </li>
-              <li>
+              <li className='flex items-center'>
                 <Link
                   href="#"
                   className="block py-2 px-3 text-white rounded hover:bg-gray-700 lg:hover:bg-inherit lg:hover:text-slate-950"
                 >
                   Contact
                 </Link>
+              </li>
+              <li className='px-2 md:hidden'>
+                <select 
+                  name="" 
+                  id="" 
+                  className="w-full border border-slate-600 bg-[#D9D9D9] mt-2 rounded"
+                  value={selectedCountry}
+                  onChange={handleCountryChange}
+                >
+                <option value="" disabled selected>Country</option>
+                <option value="">None</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Korea">Korea</option>
+                <option value="Japan">Japan</option>
+              </select>
               </li>
               <li className="px-2 md:hidden">
                 <div className="flex mt-2">
