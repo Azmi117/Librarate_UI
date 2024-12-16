@@ -13,9 +13,13 @@ export const getAllBooks = async (params) => {
     }
 }
 
-export const getBookById = async (id) => {
+export const getBookById = async (id, token) => {
     try{
-        const response = await axios.get(`${API_URL}/${id}`);
+        const response = await axios.get(`${API_URL}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return response.data;
     }catch(error){
         console.error('Error fetching book by ID:', error);

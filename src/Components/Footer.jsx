@@ -5,9 +5,9 @@ const Footer = () => {
     return(
         <>
             <div className="w-full h-[8rem] bg-[#667BC6] flex justify-center items-center md:justify-between">
-                <img src="/logo.png" alt="" className="hidden md:block w-[12.5rem] md:ms-5"/>
+                <img src="/logo.png" alt="" className="hidden md:block w-[12.5rem] md:ms-5 md:w-[10rem]"/>
                 <div className="lg:ms-[-40px] xl:ms-[-90px]">
-                    <div className="flex flex-row justify-center ms-8 md:ms-[-5rem] lg:ms-0 h-11">
+                    <div className="flex flex-row justify-center ms-4 md:ms-[-5rem] lg:ms-0 h-11">
                         <Link to={'/'} className="rounded-full overflow-hidden inline-block">
                             <img src="https://www.svgrepo.com/show/506463/discord.svg" alt="" width={50} className="block"/>
                         </Link>

@@ -6,7 +6,6 @@ const SmallBox = () => {
 
     const handleLogOut = () => {
         logout();
-        navigate("/login");
     }
 
     return(
@@ -15,7 +14,7 @@ const SmallBox = () => {
                     {isLoggedIn ? 
                     (
                         <>
-                            <div className="flex flex-col absolute md:-right-[0.4rem] lg:-right-[2.3rem] bg-white">
+                            <div className="flex flex-col absolute md:-right-[2rem] lg:-right-[2.3rem] bg-white shadow-md">
                                 <Link to={'/profile'} className="ps-1.5 py-0.5 hover:bg-gray-500 hover:text-white shadow-md drop-shadow-md">Profile</Link>
                                 <button onClick={handleLogOut} className="p-0.5 px-1 hover:bg-gray-500 hover:text-white">Logout</button> 
                             </div>

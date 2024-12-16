@@ -1,12 +1,13 @@
 import { useState } from "react";
-import useStore from "../store/store";
+import useAuthStore from "../store/store";
 import { login } from "../Services/authServices";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { setLogin } = useStore();
+    const setToken = useAuthStore((state) => state.setToken);
+    const validateToken = useAuthStore((state) => state.validateToken);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -15,7 +16,8 @@ const Login = () => {
           const params = { email, password };
           const data = await login(params);
           if (data && data.token) {
-            setLogin({ token: data.token, user: data.user });
+            setToken(data.token); // Simpan token di store dan localStorage
+            validateToken();
             navigate("/");
           } else {
             throw new Error("Invalid login response");
@@ -38,13 +40,13 @@ const Login = () => {
                             <div>
                                 <img src="https://www.svgrepo.com/show/522690/user.svg" alt="" className="w-9 bg-[#7C93C3] p-1"/>
                             </div>
-                            <input type="email" className="w-56 h-9 bg-[#1E2A5E] amaranth-bold rounded-none caret-white px-1.5 text-white placeholder-white" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="current-password"/>
+                            <input type="email" className="w-56 h-9 bg-[#1E2A5E] amaranth-bold rounded-none caret-white px-1.5 text-white placeholder-white" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                         </div>
                         <div className="flex justify-center mt-7">
                             <div>
                                 <img src="https://www.svgrepo.com/show/505414/lock-off.svg" alt="" className="w-9 bg-[#7C93C3] p-1"/>
                             </div>
-                            <input type="password" className="w-56 h-9 bg-[#1E2A5E] amaranth-bold rounded-none caret-white px-1.5 text-white placeholder-white" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password"/>
+                            <input type="password" className="w-56 h-9 bg-[#1E2A5E] amaranth-bold rounded-none caret-white px-1.5 text-white placeholder-white" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                         </div>
                         <div className="flex justify-center mt-9">
                             <button type="submit" className="w-5/6 bg-[#ECE8E8] py-1 rounded-md amaranth-bold border border-slate-950 hover:bg-gray-300">Login</button>

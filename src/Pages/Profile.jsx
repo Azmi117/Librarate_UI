@@ -3,7 +3,6 @@ import Dropzone from "../Components/Profile/Dropzone";
 import { getUserByID, updateUser } from "../Services/userService";
 import { jwtDecode } from "jwt-decode";
 import useAuthStore from "../store/store";
-import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const { isLoggedIn } = useAuthStore();
@@ -12,7 +11,6 @@ const Profile = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [photo, setPhoto] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUser = async () => {

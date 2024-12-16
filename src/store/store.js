@@ -1,15 +1,41 @@
-import { create } from "zustand";
+import { create } from 'zustand';
+import { jwtDecode } from 'jwt-decode';
 
 const useAuthStore = create((set) => ({
-  token: localStorage.getItem("token") || null, // Ambil token dari localStorage saat inisialisasi
-  isLoggedIn: !!localStorage.getItem("token"), // Status login berdasarkan token di localStorage
-  setLogin: ({ token }) => {
-    localStorage.setItem("token", token); // Simpan token ke localStorage
-    set({ token, isLoggedIn: true });
+  isLoggedIn: false,
+  user: null,
+  token: localStorage.getItem('token'),
+  setToken: (token) => {
+    if (token) {
+      localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
+    }
+    set({ token });
   },
+  validateToken: () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          // Token expired
+          localStorage.removeItem('token');
+          set({ token: null, isLoggedIn: false, user: null });
+        } else {
+          set({ isLoggedIn: true, user: decoded });
+        }
+      } catch (error) {
+        console.error('Invalid token:', error);
+        localStorage.removeItem('token');
+        set({ token: null, isLoggedIn: false, user: null });
+      }
+    }
+  },
+  
   logout: () => {
-    localStorage.removeItem("token"); // Hapus token dari localStorage
-    set({ token: null, isLoggedIn: false });
+    localStorage.removeItem('token'); // Hapus token dari localStorage
+    set({ token: null, isLoggedIn: false, user: null }); // Reset state store
   },
 }));
 

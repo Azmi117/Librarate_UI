@@ -28,7 +28,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     <>
       <div className="w-screen flex justify-center">
         <nav aria-label="Page navigation example">
-          <ul class="flex items-center -space-x-px h-10 text-base">
+          <ul className="flex items-center -space-x-px h-10 text-base">
             <li>
               <button
                 onClick={() => onPageChange(currentPage - 1)}
