@@ -42,6 +42,7 @@ export const createBook = async (bookData, token) => {
 }
 
 export const updateBook = async (id, bookData, token) => {
+    console.log('^^^^^^^^^^^^^^', id, bookData, token);
     try{
         const response = await axios.put(`${API_URL}/update/${id}`, bookData, {
             headers: {
@@ -56,6 +57,7 @@ export const updateBook = async (id, bookData, token) => {
 };
 
 export const deleteBook = async (bookid, token) => {
+    console.log('^^^^^', token);
     try{
         const response = await axios.delete(`${API_URL}/delete/${bookid}`, {
             headers: {

@@ -2,6 +2,8 @@ import { useState } from "react";
 import useAuthStore from "../store/store";
 import { login } from "../Services/authServices";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify'; // Import Toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -19,11 +21,12 @@ const Login = () => {
             setToken(data.token); // Simpan token di store dan localStorage
             validateToken();
             navigate("/");
+            toast.success("Login successful! 🎉");
           } else {
             throw new Error("Invalid login response");
           }
         } catch (error) {
-            console.error(error);
+            toast.error("Login failed. Please check your credentials.");
         }
       };
     
@@ -58,6 +61,7 @@ const Login = () => {
                     </form>
                 </div>
             </div>
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false}/>
         </>
     )
 }

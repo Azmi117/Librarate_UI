@@ -3,7 +3,7 @@ import Carousel from "../Components/Home/Carousel";
 import Categories from "../Components/Home/Categories";
 import Card from "../Components/Home/Card";
 import Loading from "../Components/Loading";
-import Pagination from "../Components/Home/Pagination";
+import Pagination from "../Components/Pagination";
 import Footer from "../Components/Footer";
 import { getAllBooks } from "../Services/bookService";
 import { useEffect, useState } from "react";

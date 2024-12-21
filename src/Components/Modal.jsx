@@ -6,7 +6,7 @@ const Modal = ({ isOPen, onClose, children }) => {
     return(
         <>
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-2">
-                <div className="bg-[#E1D7B7] rounded-lg shadow-md p-6 w-full max-w-md">
+                <div className="bg-[#E1D7B7] rounded-lg shadow-md p-6 w-full max-w-md overflow-y-auto">
                     <div className="flex justify-end">
                         <button
                             onClick={onClose}

@@ -2,9 +2,10 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:8080/api/user';
 
-export const getAllUser = async (token) => {
+export const getAllUser = async (params, token) => {
     try{
         const response = await axios.get(API_URL, {
+            params,
             headers:{
                 Authorization: `Bearer ${token}`
             },

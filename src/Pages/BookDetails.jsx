@@ -1,6 +1,6 @@
 import Navbar from "../Components/Navbar";
-import Modal from "../Components/bookDetails/Modal";
 import StarRating from "../Components/bookDetails/Rating";
+import Modal from "../Components/Modal";
 import Footer from "../Components/Footer";
 import Loading from "../Components/Loading";
 import { useEffect, useState } from "react";
@@ -14,6 +14,8 @@ import {
 import { getUserByID } from "../Services/userService";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/store";
 
 const BookDetails = () => {
   const [book, setBook] = useState(null);
@@ -29,13 +31,22 @@ const BookDetails = () => {
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const savedToken = localStorage.getItem("token");
+  const { token, validateToken, isLoggedIn } = useAuthStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const validateUserSession = async () => {
+      await validateToken(); // Pastikan validasi token berjalan
+
+      if (!token) {
+          navigate('/login');
+      }
+    };
+
     const fetchBook = async () => {
       const convert_Id = parseInt(id);
       try {
-        const response = await getBookById(convert_Id, savedToken);
+        const response = await getBookById(convert_Id, token);
         setBook(response);
       } catch (error) {
         console.log("Error fetching book data:", error);
@@ -45,12 +56,12 @@ const BookDetails = () => {
     const fetchReviewAndUser = async () => {
       const convert_Id = parseInt(id);
       try {
-        const reviewz = await getAllReview(convert_Id, savedToken);
+        const reviewz = await getAllReview(convert_Id, token);
         setReview(reviewz); // Set reviews terlebih dahulu
 
         if (reviewz) {
           const userPromises = reviewz.map((rev) =>
-            getUserByID(rev.user_id, savedToken).then((userResponse) => ({
+            getUserByID(rev.user_id, token).then((userResponse) => ({
               user_id: rev.user_id,
               data: userResponse,
             }))
@@ -76,7 +87,8 @@ const BookDetails = () => {
     };
 
     fetchAllData();
-  }, [id]);
+    validateUserSession();
+  }, [token, isLoggedIn, validateToken, id, navigate]);
 
   if (loading) {
     return (
@@ -94,7 +106,7 @@ const BookDetails = () => {
     };
 
     try {
-      await createReview(reviewData, savedToken);
+      await createReview(reviewData, token);
       setIsModalOpen(false);
       setComment("");
       setRating(1);
@@ -112,7 +124,7 @@ const BookDetails = () => {
 
     try {
       // Ambil semua review berdasarkan ID buku
-      const updatedReviews = await getAllReview(id, savedToken);
+      const updatedReviews = await getAllReview(id, token);
 
       // Cari review yang ingin diperbarui
       const targetReview = updatedReviews.find(
@@ -124,7 +136,7 @@ const BookDetails = () => {
       }
 
       // Perbarui hanya review tertentu
-      await updateReview(targetReview.id, reviewData, savedToken);
+      await updateReview(targetReview.id, reviewData, token);
 
       setIsModalEditOpen(false);
       setEditComment("");
@@ -144,7 +156,7 @@ const BookDetails = () => {
   };
 
   const handleDeleteReview = async () => {
-    const delatedReviews = await getAllReview(id, savedToken);
+    const delatedReviews = await getAllReview(id, token);
 
     // Cari review yang ingin diperbarui
     const targetReview = delatedReviews.find(
@@ -156,7 +168,7 @@ const BookDetails = () => {
     }
 
     try {
-      await deleteReview(targetReview.id, savedToken);
+      await deleteReview(targetReview.id, token);
       setIsModalDeleteOpen(false);
       window.location.reload();
     } catch (error) {
@@ -169,7 +181,7 @@ const BookDetails = () => {
     setIsModalDeleteOpen(true);
   };
 
-  const decodeToken = jwtDecode(savedToken);
+  const decodeToken = jwtDecode(token);
 
   return (
     <>

@@ -6,6 +6,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.archivo-black-regular {
+  font-family: "Archivo Black", serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
 .amaranth-bold {
     font-family: "Amaranth", sans-serif;
