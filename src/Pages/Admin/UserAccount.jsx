@@ -58,27 +58,29 @@ const UserAccount = () => {
 
   return (
     <>
-      <Sidebar />
-      <div className="flex justify-center mt-20">
-        <input
-          type="text"
-          className="w-5/6 md:w-3/6 lg:ms-56 h-8 rounded-md px-1 bg-gray-200 shadow-md"
-          placeholder="Search here..."
-          value={searchQuery}
-          onChange={handleSearchChange} // Memperbarui searchQuery saat pengguna mengetik
-          onKeyDown={handleKeyDown}
-        />
-      </div>
-      <div className="min-h-full ms-5 lg:ms-60 mt-10 flex justify-center flex-wrap gap-5">
-        {users.map((user) => (
-          <CardUserAccount key={user.id} user={user} />
-        ))}
-        <div className="my-2">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={(page) => setCurrentPage(page)}
+      <div className="overflow-x-hidden">
+        <Sidebar />
+        <div className="flex justify-center mt-20">
+          <input
+            type="text"
+            className="w-5/6 md:w-3/6 lg:ms-56 h-8 rounded-md px-1 bg-gray-200 shadow-md"
+            placeholder="Search here..."
+            value={searchQuery}
+            onChange={handleSearchChange} // Memperbarui searchQuery saat pengguna mengetik
+            onKeyDown={handleKeyDown}
           />
+        </div>
+        <div className="min-h-full ms-5 lg:ms-60 mt-10 flex justify-center flex-wrap gap-5">
+          {users.map((user) => (
+            <CardUserAccount key={user.id} user={user} />
+          ))}
+          <div className="my-2">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
         </div>
       </div>
     </>
