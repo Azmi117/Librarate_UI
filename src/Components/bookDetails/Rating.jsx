@@ -18,7 +18,7 @@ const StarRating = ({ rating, editable, onRatingChange }) => {
 
   return (
     <div className='flex mt-2'>
-        <p className='mx-2 mt-1 font-bold'>Rating:</p>
+        <p className='mx-2 mt-1 font-bold poppins-semibold'>Rating:</p>
       {[...Array(5)].map((star, index) => {
         const ratingValue = index + 1;
 

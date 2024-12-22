@@ -14,18 +14,22 @@ const Navbar = ({ children, onSearch, onSelectCountry }) => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [userId, setUserId] = useState(null);
   const [userPhoto, setUserPhoto] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   const location = useLocation();
-
+  
+  
+  
   useEffect(() => {
     const fetchUser = async () => {
       const savedToken = localStorage.getItem('token');
+      const decodeToken = jwtDecode(savedToken);
       if(savedToken){
         try{
-          const decodeToken = jwtDecode(savedToken);
           setUserId(decodeToken.id);
-          const userData = await getUserByID(decodeToken.id, savedToken);
-          setUserPhoto(userData.photo);
+          const userdata = await getUserByID(decodeToken.id, savedToken);
+          setUserPhoto(userdata.photo);
+          setUserData(userdata);
         }catch(error){
           console.error('Error fetching user data:', error);
         }
@@ -79,7 +83,7 @@ const Navbar = ({ children, onSearch, onSelectCountry }) => {
 
   return (
     <>
-      <nav className="w-screen bg-[#7C93C3] border-gray-200">
+      <nav className="w-screen bg-[#7C93C3] border-gray-200 shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link to={'#'}>
             <img
@@ -100,7 +104,7 @@ const Navbar = ({ children, onSearch, onSelectCountry }) => {
             <div className="hidden md:flex flex items-center">
               <input 
                 type="search" 
-                className="lg:w-[20rem] md:w-[12rem] h-9 rounded-l-lg border border-slate-600 bg-[#D9D9D9] ps-1" 
+                className="lg:w-[20rem] md:w-[12rem] marcellus-regular h-9 rounded-l-lg border border-slate-600 bg-[#D9D9D9] ps-1" 
                 placeholder="Enter title book here" 
                 value={searchQuery}
                 onChange={handleSearchChange}
@@ -109,7 +113,7 @@ const Navbar = ({ children, onSearch, onSelectCountry }) => {
               <select 
                   name="" 
                   id="" 
-                  className="h-9 border border-slate-600 bg-[#D9D9D9]"
+                  className="h-9 border quicksand-regular border-slate-600 bg-[#D9D9D9]"
                   value={selectedCountry}
                   onChange={handleCountryChange}
                 >
@@ -193,6 +197,17 @@ const Navbar = ({ children, onSearch, onSelectCountry }) => {
                     Edit Profile
                   </Link>
                 </li>
+                {userData?.role === "Admin" && (
+                  <>
+                    <li className='md:hidden'>
+                      <Link 
+                        to={'/admin/activebook'}
+                      >
+                        <h1 className="block py-2 px-3 text-white rounded hover:bg-gray-700">Admin Panel</h1>
+                      </Link>
+                    </li>
+                  </>
+                )}
                 <li className="md:hidden">
                   <button
                     onClick={handleLogOut} 
@@ -224,16 +239,16 @@ const Navbar = ({ children, onSearch, onSelectCountry }) => {
               )}
               <li className='flex items-center'>
                 <Link
-                  href="#"
-                  className="block py-2 px-3 text-white md:ms-2 rounded hover:bg-gray-700 lg:hover:bg-inherit lg:hover:text-slate-950 flex"
+                  to={'/about'}
+                  className="block py-2 px-3 text-white md:ms-2 rounded hover:bg-gray-700 poppins-semibold lg:hover:bg-inherit lg:hover:text-gray-600 flex"
                 >
                   About
                 </Link>
               </li>
               <li className='flex items-center'>
                 <Link
-                  href="#"
-                  className="block py-2 px-3 text-white rounded hover:bg-gray-700 lg:hover:bg-inherit lg:hover:text-slate-950"
+                  to={'/contact'}
+                  className="block py-2 px-3 text-white rounded hover:bg-gray-700 poppins-semibold lg:hover:bg-inherit lg:hover:text-gray-600"
                 >
                   Contact
                 </Link>

@@ -20,7 +20,7 @@ export const getAllReview = async (id, token) => {
 export const createReview = async (reviewData, token) => {
     try {
       const response = await axios.post(
-        `${API_URL}/create/${reviewData.book_id}`,
+        `${API_URL}/create/${reviewData.bookId}`,
         reviewData,
         {
           headers: {
@@ -37,7 +37,6 @@ export const createReview = async (reviewData, token) => {
 
 // Fungsi untuk memperbarui review
 export const updateReview = async (reviewId, reviewData, token) => {
-  console.log('>>>>>>>>SERVICE', reviewId);
   try {
     const response = await axios.put(
       `${API_URL}/update/${reviewId}`,

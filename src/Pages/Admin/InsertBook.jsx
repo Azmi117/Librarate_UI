@@ -4,6 +4,8 @@ import { createBook } from "../../Services/bookService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/store"
+import { toast } from "react-toastify";
+
 
 const InsertBook = () => {
     const [formData, setFormData] = useState({
@@ -55,6 +57,12 @@ const InsertBook = () => {
     
       const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!formData.photoMobile && !formData.photoDesktop) {
+            toast.warn('Foto belum diunggah 📸');
+            return;
+        }
+
         const formDataPayload = new FormData();
         formDataPayload.append("title", formData.title);
         formDataPayload.append("genre", formData.genre);

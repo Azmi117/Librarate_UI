@@ -2,8 +2,9 @@ import { useState } from "react";
 import Modal from "./Modal";
 import Dropzone from "./Dropzone";
 import { updateBook, deleteBook } from "../../Services/bookService";
+import { toast } from "react-toastify";
 
-const CardActiveBook = ({ book }) => {
+const CardActiveBook = ({ book, updateBooks }) => {
   const [modalEdit, setModalEdit] = useState(false);
   const [formData, setFormData] = useState({ ...book });
   const [modalDelete, setModalDelete] = useState(false);
@@ -34,6 +35,12 @@ const CardActiveBook = ({ book }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.photoMobile && !formData.photoDesktop) {
+      toast.warn('Foto belum diunggah 📸');
+      return;
+    }
+
     const formDataPayload = new FormData();
     formDataPayload.append("title", formData.title);
     formDataPayload.append("genre", formData.genre);
@@ -50,23 +57,25 @@ const CardActiveBook = ({ book }) => {
       formDataPayload.append("photo", formData.photoDesktop);
     }
     try {
-      await updateBook(book.id, formDataPayload, token);
-      alert("Book updated successfully!");
+      const update = await updateBook(book.id, formDataPayload, token);
+      updateBooks(update, "update");
       setModalEdit(false);
-      window.location.reload();
+      toast.info('Success Update Book 🎉');
     } catch (error) {
       console.error("Error updating book:", error);
-      alert("Failed to update book!");
+      toast.error('Failed Update Book 😥');
     }
   };
 
   const handleDeleteBook = async () => {
     try {
       await deleteBook(book.id, token);
+      updateBooks(book, "delete");
       setModalDelete(false);
-      window.location.reload();
+      toast.success('Success Delete Book 🎉');
     } catch (error) {
       console.error("Failed to delete book:", error);
+      toast.error('Failed Delete Book 😥');
     }
   };
 
@@ -107,7 +116,7 @@ const CardActiveBook = ({ book }) => {
       {/* Modal Edit */}
       <Modal onClose={() => setModalEdit(false)} isOPen={modalEdit}>
         <div className="flex flex-col">
-          <h1 className="text-xl mx-auto">Edit Book</h1>
+          <h1 className="text-xl mx-auto poppins-semibold">Edit Book</h1>
           <form
             onSubmit={handleSubmit}
             action=""
@@ -119,7 +128,7 @@ const CardActiveBook = ({ book }) => {
                 dark:[&::-webkit-scrollbar-track]:bg-neutral-500"
             >
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="title" className="">
+              <label htmlFor="title" className="lexend-regular">
                 Title
               </label>
               <input 
@@ -131,7 +140,7 @@ const CardActiveBook = ({ book }) => {
               />
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="genre" className="">
+              <label htmlFor="genre" className="lexend-regular">
                 Genre
               </label>
               <input 
@@ -143,7 +152,7 @@ const CardActiveBook = ({ book }) => {
               />
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="author" className="">
+              <label htmlFor="author" className="lexend-regular">
                 Author
               </label>
               <input 
@@ -155,7 +164,7 @@ const CardActiveBook = ({ book }) => {
               />
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="pages" className="">
+              <label htmlFor="pages" className="lexend-regular">
                 Pages
               </label>
               <input 
@@ -167,7 +176,7 @@ const CardActiveBook = ({ book }) => {
               />
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="synopsis" className="">
+              <label htmlFor="synopsis" className="lexend-regular">
                 Synopsis
               </label>
               <textarea
@@ -181,19 +190,19 @@ const CardActiveBook = ({ book }) => {
               />
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-                <label htmlFor="">
+                <label htmlFor="" className="lexend-regular">
                     Photo
                 </label>
               <Dropzone id="dropzone-xl-desktop" onFileUpload={handlePhotoUpload}/>
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="country" className="">
+              <label htmlFor="country" className="lexend-regular">
                 Country
               </label>
               <select 
                   name="" 
                   id="country" 
-                  className="h-7 rounded-md shadow-md rounded-md"
+                  className="h-7 rounded-md shadow-md rounded-md poppins-regular"
                   value={formData.country}
                   onChange={handleInputChange}
                 >
@@ -204,7 +213,7 @@ const CardActiveBook = ({ book }) => {
               </select>
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="3d_image" className="">
+              <label htmlFor="3d_image" className="lexend-regular">
                 3D Image
               </label>
               <input 
@@ -215,7 +224,7 @@ const CardActiveBook = ({ book }) => {
                 onChange={handleInputChange}/>
             </div>
             <div className="flex flex-col mt-3 rounded-md">
-              <label htmlFor="title_image" className="">
+              <label htmlFor="title_image" className="lexend-regular">
                 Title Image
               </label>
               <input 
@@ -242,7 +251,7 @@ const CardActiveBook = ({ book }) => {
       <Modal onClose={() => setModalDelete(false)} isOPen={modalDelete}>
       <div className="flex flex-col">
           <div className="flex justify-center font-bold mb-10 pt-5">
-            <h1>Apakah anda yakin ingin menghapus?</h1>
+            <h1 className="poppins-semibold">Apakah anda yakin ingin menghapus?</h1>
           </div>
           <div className="mt-5 mb-10 flex justify-around">
             <button

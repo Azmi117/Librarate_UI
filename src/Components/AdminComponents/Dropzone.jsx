@@ -69,7 +69,7 @@ const Dropzone = ({ onFileUpload, id }) => {
                         </>
                     )}
                   </div>
-                  <input id={id} type="file" className="hidden" onChange={handleChange} required/>
+                  <input id={id} type="file" className="hidden" onChange={handleChange}/>
                 </label>
               </div>
         </>

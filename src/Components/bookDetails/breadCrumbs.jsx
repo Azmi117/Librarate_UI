@@ -11,7 +11,7 @@ const BreadCrumbs = () => {
         <li className="inline-flex items-center">
           <Link
             to="/"
-            className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-white"
+            className="inline-flex items-center text-sm poppins-semibold font-medium text-gray-700 hover:text-white"
           >
             <svg
               className="w-3 h-3 me-2.5"
@@ -54,7 +54,7 @@ const BreadCrumbs = () => {
                 ) : (
                   <Link
                     to={to}
-                    className="ms-1 text-sm font-medium text-gray-700 hover:text-white md:ms-2"
+                    className="ms-1 text-sm font-medium poppins-semibold text-gray-700 hover:text-white md:ms-2"
                   >
                     {value.replace('-', ' ')}
                   </Link>

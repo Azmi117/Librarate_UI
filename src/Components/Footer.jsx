@@ -21,8 +21,8 @@ const Footer = () => {
                     <p className="text-xs ms-5 mt-4 md:mt-0 md:ms-[-4rem] lg:ms-0 md:text-sm lg:mt-2">© 2024 Semua Hak Dilindungi Undang-Undang, Librarate</p>
                 </div>
                 <div className="hidden md:flex flex-col me-5">
-                    <Link to={'/about'} className="mx-auto font-bold hover:text-white">About</Link>
-                    <Link to={'/contact'} className="font-bold mt-2 hover:text-white">Contact</Link>
+                    <Link to={'/about'} className="mx-auto font-bold poppins-semibold hover:text-white">About</Link>
+                    <Link to={'/contact'} className="font-bold poppins-semibold mt-2 hover:text-white">Contact</Link>
                 </div>
             </div>
         </>

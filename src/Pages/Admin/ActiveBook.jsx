@@ -45,6 +45,21 @@ const ActiveBook = () => {
     fetchBooks();
   }, [token, navigate, isLoggedIn, validateToken, currentPage, searchQuery]);
 
+  const updateBooks = (updatedBook, action) => {
+    if (action === "update") {
+      // Update book
+      setBooks((prevBooks) =>
+        prevBooks.map((book) =>
+          book.id === updatedBook.id ? { ...updatedBook } : book
+        )
+      );
+    } else if (action === "delete") {
+      // Delete book
+      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== updatedBook.id));
+    }
+  };
+
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value); // Memperbarui searchQuery sesuai input
   };
@@ -80,7 +95,7 @@ const ActiveBook = () => {
         <div className="lg:ms-80 lg:me-20 mt-16 mb-16 flex justify-center flex-wrap gap-5 min-h-full">
           {books.map((book) => (
             <>
-              <CardActiveBook key={book.id} book={book} />
+              <CardActiveBook key={book.id} book={book} updateBooks={updateBooks}/>
             </>
           ))}
           <Pagination

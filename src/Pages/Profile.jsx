@@ -4,6 +4,7 @@ import { getUserByID, updateUser } from "../Services/userService";
 import { jwtDecode } from "jwt-decode";
 import useAuthStore from "../store/store";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const { token, validateToken, isLoggedIn } = useAuthStore();
@@ -43,8 +44,14 @@ const Profile = () => {
     fetchUser();
   }, [token, validateToken, isLoggedIn]);
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if(!photo){
+      toast.warn('Foto belum diunggah 📸');
+      return;
+    }
 
     const formData = new FormData();
     formData.append("username", username);
@@ -66,10 +73,10 @@ const Profile = () => {
       }
       console.log(updatedUserData.photo);
 
-      alert("Profile updated successfully!");
+      toast.info('Success Update Profile 🎉');
     } catch (error) {
       console.error("Error updating user", error);
-      alert("Failed to update profile. Please try again.");
+      toast.error('Failed Update Profile 😥');
     }
   };
 
