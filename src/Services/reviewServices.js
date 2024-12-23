@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:8080/api/review';
+const API_URL = 'https://apilibrarate-production.up.railway.app/api/review';
 
 export const getAllReview = async (id, token) => {
     try{

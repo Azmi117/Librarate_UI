@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:8080/api/book';
+const API_URL = 'https://apilibrarate-production.up.railway.app/api/book';
 
 
 export const getAllBooks = async (params) => {

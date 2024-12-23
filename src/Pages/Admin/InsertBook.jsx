@@ -80,10 +80,10 @@ const InsertBook = () => {
         }
         try {
           await createBook(formDataPayload, token);
-          alert("Book created successfully!");
+          toast.success("Book created successfully!");
         } catch (error) {
           console.error("Error updating book:", error);
-          alert("Failed to created book!");
+          toast.error("Failed to created book!");
         }
       };
 
