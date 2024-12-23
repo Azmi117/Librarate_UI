@@ -48,13 +48,13 @@ const BreadCrumbs = () => {
                   />
                 </svg>
                 {isLast ? (
-                  <span className="ms-1 text-sm font-medium text-gray-700 md:ms-2">
+                  <span className="ms-1 text-sm poppins-semibold font-medium text-gray-700 md:ms-2">
                     {value.replace('-', ' ')} {/* Breadcrumb terakhir hanya teks */}
                   </span>
                 ) : (
                   <Link
                     to={to}
-                    className="ms-1 text-sm font-medium poppins-semibold text-gray-700 hover:text-white md:ms-2"
+                    className="ms-1 text-sm font-medium text-gray-700 hover:text-white md:ms-2"
                   >
                     {value.replace('-', ' ')}
                   </Link>

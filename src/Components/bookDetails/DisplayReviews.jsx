@@ -11,7 +11,7 @@ const DisplayReviews = ({ comments, users, setComments }) => {
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
   const token = localStorage.getItem('token');
-  const data_User = jwtDecode(token);
+  const data_User = token ? jwtDecode(token) : null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
