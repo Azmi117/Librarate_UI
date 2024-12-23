@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Dropzone from "../Components/Register/Dropzone";
 import { useState } from "react";
 import * as authService from "../Services/authServices"
+import { toast } from 'react-toastify';
 
 const Register = () => {
 
@@ -53,8 +54,10 @@ const Register = () => {
     try {
       const response = await authService.register(formDataPayload);
       console.log("User registered successfully:", response);
+      toast.success('Success Create Account 🎉');
     } catch (error) {
       console.error("Error registering user:", error);
+      toast.error('Failed Create Account 😥');
     }
   };
   
