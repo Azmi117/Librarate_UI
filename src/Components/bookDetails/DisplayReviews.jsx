@@ -182,7 +182,7 @@ const DisplayReviews = ({ comments, users, setComments }) => {
       {/* Modal Delete */}
       <Modal isOPen={modalDeleteOpen} onClose={() => setModalDeleteOpen(false)}>
         <div className="flex justify-center mt-3">
-            <h1 className="text-lg font-bold poppins-semibold">Apakah anda yakin ingin menghapus?</h1>
+            <h1 className="font-bold poppins-semibold">Apakah anda yakin ingin menghapus?</h1>
         </div>
         <div className="flex justify-around my-10">
             <button onClick={() => setModalDeleteOpen(false)} className="text-lg bg-[#7C93C3] text-white w-20 h-10 rounded-lg">No</button>
